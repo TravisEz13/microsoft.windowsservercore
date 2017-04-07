@@ -22,8 +22,9 @@ Describe "Verify containers contain expected commands" {
             [string]$command
             
         )
-
-        $powershellArguments = '-command &{if(get-command -name {0}){1}write-output "Exists"{2}else{1}write-output "NotFound"{2}{2}' -f $command,'{','}'
+        $stderr = 'testdrive:\stderr.txt'
+        $stdout = 'testdrive:\stdout.txt'
+        $powershellArguments = '-command &{1}if(get-command -name {0} -erroraction silentlycontinue){1}write-output "Exists"{2}else{1}write-output "NotFound"{2}{2}' -f $command,'{','}'
         Write-Verbose -Message "Running powershell in container with: $powershellArguments" -Verbose
         start-process -Wait -filepath docker `
             -argumentlist @(
@@ -32,10 +33,12 @@ Describe "Verify containers contain expected commands" {
                 'powershell'
                 $powershellArguments
             ) `
-            -RedirectStandardError $env:temp\stderr.txt `
-            -RedirectStandardOutput $env:temp\stdout.txt `
+            -RedirectStandardError $stderr `
+            -RedirectStandardOutput $stdout `
             -NoNewWindow
-        Get-Content testdrive:\stderr.txt | should benullorempty
-        Get-Content testdrive:\stdout.txt | should belike 'Exists'
+        $stderr | should Exist
+        $stdout | should Exist
+        Get-Content $stderr | should benullorempty
+        Get-Content $stdout | should beexactly 'Exists'
     }
 }
