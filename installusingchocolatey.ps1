@@ -22,6 +22,8 @@ choco install -y $PackageName
 
 if($executable)
 {
+    $machinePathString = [System.Environment]::GetEnvironmentVariable('path',[System.EnvironmentVariableTarget]::Machine)
+    $machinePath = $machinePathString -split ';'
     Write-Verbose "Verifing $Executable is in path..." -Verbose
     $exeSource = $null
     $exeSource = Get-ChildItem -path "$env:ProgramFiles\$Executable" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
@@ -29,6 +31,11 @@ if($executable)
     {
         Write-Verbose "Falling back to x86 program files..." -Verbose
         $exeSource = Get-ChildItem -path "${env:ProgramFiles(x86)}\$Executable" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
+    }
+    if(!$exeSource)
+    {
+        Write-Verbose "Falling back to chocolatey..." -Verbose
+        $exeSource = Get-ChildItem -path "$env:ProgramData\chocolatey\$Executable" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
     }
     if(!$exeSource)
     {
@@ -41,13 +48,22 @@ if($executable)
     }
 
     $exePath = Split-Path -Path $exeSource
-    $newPath = "$env:path;$exePath"
-    Write-Verbose "setting path to: $newPath" -Verbose
-    [System.Environment]::SetEnvironmentVariable('path',$newPath,[System.EnvironmentVariableTarget]::Machine)
+    if($machinePath -inotcontains $exePath)
+    {
+        $newPath = "$machinePathString;$exePath"
+        Write-Verbose "Adding $exePath to path..." -Verbose
+        [System.Environment]::SetEnvironmentVariable('path',$newPath,[System.EnvironmentVariableTarget]::Machine)
+    }
+    else 
+    {
+        Write-Verbose "$exePath already in path." -Verbose
+    }
 }
 
 if($Cleanup.IsPresent)
 {
     Write-Verbose "Cleaning up chocolatey..." -Verbose
+    [int]$measuredCleanupMB = (Get-ChildItem $env:temp\chocolatey\* -Recurse | Measure-Object -Property Length -Sum).Sum / 1MB
     Remove-Item -recurse -force $env:temp\chocolatey -ErrorAction SilentlyContinue
+    Write-Verbose "Cleaned up $measuredCleanupMB MB." -Verbose
 }
