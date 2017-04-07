@@ -1,7 +1,6 @@
         Describe "git" {
             $repos = @(
                 @{repo = 'travisez13/microsoft.windowsservercore.git'}
-                @{repo = 'travisez13/microsoft.windowsservercore.git_and_nuget'}
             )
 
             it "<repo> should contain git" -TestCases $repos {
