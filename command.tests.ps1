@@ -23,12 +23,14 @@ Describe "Verify containers contain expected commands" {
             
         )
 
+        $powershellArguments = '-command &{if(get-command -name {0}){1}write-output "Exists"{2}else{1}write-output "NotFound"{2}{2}' -f $command,'{','}'
+        Write-Verbose -Message "Running powershell in container with: $powershellArguments" -Verbose
         start-process -Wait -filepath docker `
             -argumentlist @(
                 'run'
                 "${repo}:latest"
                 'powershell'
-                ('-command &{if(get-command -name {0}){write-output "Exists"}else{write-output "NotFound"}}' -f $command)
+                $powershellArguments
             ) `
             -RedirectStandardError $env:temp\stderr.txt `
             -RedirectStandardOutput $env:temp\stdout.txt `
