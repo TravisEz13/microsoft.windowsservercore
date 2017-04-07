@@ -18,7 +18,17 @@ Install-Package -Name $PackageName -ProviderName Chocolatey -Force
 
 Write-Verbose "Verifing $Executable is in path..." -Verbose
 $exeSource = $null
-$exeSource = Get-ChildItem -path $executable -Recurse | Select-Object -First 1 -ExpandProperty FullName
+$exeSource = Get-ChildItem -path "$env:ProgramFiles\$executable" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
+if(!$exeSource)
+{
+    Write-Verbose "Falling back to x86 program files..." -Verbose
+    $exeSource = Get-ChildItem -path "${env:ProgramFiles(x86)}\$executable" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
+}
+if(!$exeSource)
+{
+    Write-Verbose "Falling back to the root of the drive..." -Verbose
+    $exeSource = Get-ChildItem -path "/$executable" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
+}
 if(!$exeSource)
 {
     throw "$executable not found"
