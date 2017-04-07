@@ -50,5 +50,4 @@ if($Cleanup.IsPresent)
 {
     Write-Verbose "Cleaning up chocolatey..." -Verbose
     Remove-Item -recurse -force $env:temp\chocolatey -ErrorAction SilentlyContinue
-    remove-item -Recurse "$env:ProgramData\chocolatey\lib"  -ErrorAction SilentlyContinue
 }
