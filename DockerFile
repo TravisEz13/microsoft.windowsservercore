@@ -4,12 +4,9 @@ LABEL readme.md="https://github.com/TravisEz13/docker/blob/master/microsoft/wind
 LABEL description="This Dockerfile for Windows Server Core with git and NuGet installed via chocolatey.  See readme on docker hub for licensing."
 
 SHELL ["powershell"]
-COPY installcmake.ps1 /
+COPY installusingchocolatey.ps1 /
 COPY cleanupchocolatey.ps1 /
-RUN Write-Verbose Installing.Chocolatey... -Verbose; \
-    Install-PackageProvider -Name Chocolatey -Force; \
-    Write-Verbose Installing.git... -Verbose; \
-    Install-Package -Name git -ProviderName Chocolatey -Force; \
-    Write-Verbose Installing.nuget... -Verbose; \
-    Install-Package -Name nuget.commandline -ProviderName Chocolatey -Force; \
+RUN ./installusingchocolatey.ps1 -PackageName git -Executable git.exe; \
+    ./installusingchocolatey.ps1 -PackageName nuget.commandline -Executable nuget.exe; \
+    ./installusingchocolatey.ps1 -PackageName cmake.install -Executable cmake.exe; \    
     ./cleanupchocolatey.ps1
