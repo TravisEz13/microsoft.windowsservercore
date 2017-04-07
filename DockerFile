@@ -6,7 +6,6 @@ LABEL description="This Dockerfile for Windows Server Core with git and NuGet in
 SHELL ["powershell"]
 COPY installusingchocolatey.ps1 /
 COPY cleanupchocolatey.ps1 /
-RUN ./installusingchocolatey.ps1 -PackageName git -Executable git.exe; \
-    ./installusingchocolatey.ps1 -PackageName nuget.commandline -Executable nuget.exe; \
-    ./installusingchocolatey.ps1 -PackageName cmake.install -Executable cmake.exe; \    
-    ./cleanupchocolatey.ps1
+RUN ./installusingchocolatey.ps1 -PackageName git; \
+    ./installusingchocolatey.ps1 -PackageName nuget.commandline; \
+    ./installusingchocolatey.ps1 -PackageName cmake.install -Executable cmake.exe -Cleanup
