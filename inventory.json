@@ -1,0 +1,10 @@
+[
+    {
+        "path":  "./microsoft/windowsservercore/git",
+        "repo":  "travisez13/microsoft.windowsservercore.git"
+    },
+    {
+        "path":  "./microsoft/windowsservercore/git_and_nuget",
+        "repo":  "travisez13/microsoft.windowsservercore.git_and_nuget"
+    }
+]
