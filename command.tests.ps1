@@ -1,15 +1,16 @@
+$repoName = &"$psscriptroot\reponame.ps1"
 Describe "Verify containers contain expected commands" {
     $repos = @(
         @{
-            repo = 'travisez13/microsoft.windowsservercore.git'
+            repo = $repoName
             command = 'git.exe'
         }
         @{
-            repo = 'travisez13/microsoft.windowsservercore.git'
+            repo = $repoName
             command = 'cmake.exe'
         }
         @{
-            repo = 'travisez13/microsoft.windowsservercore.git'
+            repo = $repoName
             command = 'nuget.exe'
         }
     )
@@ -29,6 +30,7 @@ Describe "Verify containers contain expected commands" {
         start-process -Wait -filepath docker `
             -argumentlist @(
                 'run'
+                '--rm'
                 "${repo}:latest"
                 'powershell'
                 $powershellArguments
