@@ -1,11 +1,19 @@
 param(
     [string[]]
-    $Tags = 'latest'
+    $Tags = 'latest',
+    [switch]
+    $NoCache
 )
+$repoName = &"$psscriptroot\reponame.ps1"
 $tagParams = @()
 foreach($tag in $tags)
 {
     $tag = $tag.ToLowerInvariant()
-    $tagParams += "travisez13/microsoft.windowsservercore.git:$tag"
+    $tagParams += '-t'
+    $tagParams += "${repoName}:$tag"
 }
-docker build -t travisez13/microsoft.windowsservercore.git $PSScriptRoot
+if($NoCache)
+{
+    $tagParams += '--no-cache'
+}
+docker build $tagParams $PSScriptRoot
