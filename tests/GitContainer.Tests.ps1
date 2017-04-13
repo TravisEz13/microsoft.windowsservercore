@@ -1,4 +1,4 @@
-$repoName = &"$psscriptroot\reponame.ps1"
+$repoName = &"$psscriptroot\..\reponame.ps1"
 Describe "Tests in Container $repoName pass"{
     BeforeAll{
         $resultFileName = 'results.xml'
