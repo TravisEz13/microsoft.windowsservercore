@@ -23,7 +23,7 @@ Describe "Tests in Container $repoName pass"{
     foreach ( $testCase in $testCases )
     {
         $name = $testCase.description
-        $describe = $testCase.name -replace $name, ""
+        $describe = $testCase.name.Replace($name, "")
         if(-not $tests.Contains($describe))
         {
             $tests += @{$describe=@()}

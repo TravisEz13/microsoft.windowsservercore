@@ -17,3 +17,4 @@ if($NoCache)
     $tagParams += '--no-cache'
 }
 docker build $tagParams $PSScriptRoot
+Invoke-Pester "$PSScriptRoot\tests"
