@@ -1,4 +1,4 @@
-FROM microsoft/windowsservercore
+FROM microsoft/powershell:windowsservercore
 LABEL maintainer='Travis Plunk <github@ez13.net>'
 LABEL readme.md="https://github.com/TravisEz13/docker/blob/master/microsoft/windowsservercore/git_and_nuget/readme.md"
 LABEL description="This Dockerfile for Windows Server Core with git and NuGet installed via chocolatey.  See readme on docker hub for licensing."
