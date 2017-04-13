@@ -9,3 +9,4 @@ RUN Import-Module ./dockerInstall.psm1; \
     Install-ChocolateyPackage -PackageName git -Executable git.exe; \
     Install-ChocolateyPackage -PackageName nuget.commandline -Executable nuget.exe; \
     Install-ChocolateyPackage -PackageName cmake.install -Executable cmake.exe -Cleanup
+COPY containerTests/ containerTests/
