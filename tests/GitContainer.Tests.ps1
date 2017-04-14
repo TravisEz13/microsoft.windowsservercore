@@ -63,7 +63,7 @@ Describe "Tests in Container $repoName pass"{
     }
     
     it "Running tests should produce xml" {
-        docker run --rm -v "${resolvedTestDrive}:$containerTestDrive" $repoName Invoke-Pester .\containerTests -OutputFile $containerXmlPath -OutputFormat NUnitXml
+        docker run --rm -v "${resolvedTestDrive}:$containerTestDrive" $repoName Invoke-Pester .\containerFiles\Tests -OutputFile $containerXmlPath -OutputFormat NUnitXml
         $resolvedXmlPath | should exist
     }
     if(test-Path $resolvedXmlPath)
@@ -72,7 +72,7 @@ Describe "Tests in Container $repoName pass"{
     }
 
     it "Running tests should produce xml in container with 4GB RAM" {
-        docker run --rm -v "${resolvedTestDrive}:$containerTestDrive" -m 3968m $repoName Invoke-Pester .\containerTests -OutputFile $containerXmlPath -OutputFormat NUnitXml
+        docker run --rm -v "${resolvedTestDrive}:$containerTestDrive" -m 3968m $repoName Invoke-Pester .\containerFiles\Tests -OutputFile $containerXmlPath -OutputFormat NUnitXml
         $resolvedXmlPath | should exist
     }
     if(test-Path $resolvedXmlPath)
